@@ -1,0 +1,26 @@
+{
+  "name": "jasmine-rjs",
+  "author": "mickael.jeanroy@gmail.com",
+  "main": "src/jasmine-rjs.js",
+  "version": "0.1.0",
+  "description": "Simple tool to make requirejs unit tests a breeze",
+  "devDependencies": {
+    "gulp": "3.8.11",
+    "gulp-jshint": "1.9.2",
+    "gulp-task-listing": "1.0.0",
+    "karma": "0.12.31",
+    "jasmine-core": "2.2.0",
+    "requirejs": "2.1.16",
+    "karma-jasmine": "0.3.5",
+    "karma-requirejs": "0.2.2",
+    "karma-phantomjs-launcher": "0.1.4",
+    "karma-chrome-launcher": "0.1.7"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "gulp test",
+    "build": "gulp build"
+  }
+}
