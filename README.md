@@ -10,8 +10,7 @@ This plugin is fully compatible with jasmine 1.3 and jasmine 2.0 / 2.2.
 
 Suppose you have a module:
 
-`̀`javascript
-
+```javascript
 require([], function() {
   return {
     hello: function(name) {
@@ -19,12 +18,11 @@ require([], function() {
     }
   };
 });
-
 ```
 
 Using jasmine-rjs plugin, you can unit test your module with a simple syntax:
 
-`̀`javascript
+```javascript
 describe('My moodule', function() {
 
   it('should say hello', rjs(['myModule'], function(myModule) {
@@ -32,12 +30,11 @@ describe('My moodule', function() {
   }));
 
 });
-
-``̀
+```
 
 If the name of your module is a valid javascript variable, then you could just define your function and jasmine-rjs will automatically detect parameter name to load your modules:
 
-`̀`javascript
+```javascript
 describe('My moodule', function() {
 
   it('should say hello', rjs(function(myModule) {
@@ -45,12 +42,11 @@ describe('My moodule', function() {
   }));
 
 });
-
-``̀
+```
 
 To make it even simpler with a long test suite, you can load your module in your ```beforeEach``̀ function:
 
-`̀`javascript
+```javascript
 describe('My moodule', function() {
 
   var myModule;
@@ -65,5 +61,4 @@ describe('My moodule', function() {
   });
 
 });
-
-``̀
+```
