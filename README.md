@@ -6,6 +6,12 @@ Simple jasmine plugin that make requirejs unit tests simpler.
 
 This plugin is fully compatible with jasmine 1.3 and jasmine 2.0 / 2.2.
 
+## Installation
+
+Using npm: ```npm install jasmine-rjs```
+
+Using bower: ```bower install jasmine-rjs```
+
 ## API
 
 Suppose you have a module:
