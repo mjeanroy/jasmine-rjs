@@ -25,6 +25,10 @@
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var taskListing = require('gulp-task-listing');
+var git = require('gulp-git');
+var bump = require('gulp-bump');
+var filter = require('gulp-filter');
+var tag_version = require('gulp-tag-version');
 
 gulp.task('lint', function() {
   return gulp.src("src/**/*.js")
@@ -71,6 +75,28 @@ var testTasks = [];
   });
 });
 
+['minor', 'major', 'patch'].forEach(function(level) {
+  gulp.task('release:' + level, ['build'], function() {
+    gulp.src(['./bower.json', './package.json'])
+
+      // bump the version number in those files 
+      .pipe(bump({type: level}))
+
+      // save it back to filesystem 
+      .pipe(gulp.dest('./'))
+
+      // commit the changed version number 
+      .pipe(git.commit('release: bumps package version'))
+ 
+      // read only one file to get the version number 
+      .pipe(filter('package.json'))
+
+      // tag it in the repository
+      .pipe(tag_version());
+  });
+});
+
+gulp.task('release', ['release:minor']);
 gulp.task('tdd', tddTasks);
 gulp.task('test', testTasks);
 gulp.task('build', ['lint', 'test']);
