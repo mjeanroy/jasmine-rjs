@@ -1,13 +1,14 @@
 {
   "name": "jasmine-rjs",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "authors": [
     "Mickael Jeanroy <mickael.jeanroy@gmail.com>"
   ],
   "description": "Simple plugin to make requirejs unit tests a breeze",
   "main": "src/jasmine-rjs.js",
   "keywords": [
-    "jasmine", "requirejs"
+    "jasmine",
+    "requirejs"
   ],
   "license": "MIT",
   "private": false,
@@ -17,6 +18,5 @@
     "test",
     "gulpfile.js"
   ],
-  "dependencies": {
-  }
+  "dependencies": {}
 }
