@@ -79,29 +79,64 @@
     return map(result, normalizeParameterName);
   };
 
-  var rjs = function(array, onLoaded) {
-  	if (isFunction(array)) {
+  var parseArgs = function(array, onLoaded) {
+    if (isFunction(array)) {
       onLoaded = array;
       array = extractParameterNames(onLoaded);
-  	} else if (isString(array)) {
+    } else if (isString(array)) {
       array = [array];
     }
 
-    return function(done) {
-      var ctx = this;
-      require(array, function() {
-        onLoaded.apply(ctx, toArray(arguments));
-
-        // Jasmine 2+ asynchronous support
-        // TODO support jasmine 1.3
-        if (done) {
-          done();
-        }
-      });
+    return {
+      deps: array,
+      fn: onLoaded
     };
   };
 
-  
-  jasmine.rjs = root.rjs = rjs;
+  var r = function(ctx, args, done) {
+    require(args.deps, function() {
+      args.fn.apply(ctx, toArray(arguments));
+      done();
+    });
+  };
+
+  var rjs = {
+    1: function(array, onLoaded) {
+      var args = parseArgs(array, onLoaded);
+      return function() {
+        var flag = false;
+
+        r(this, args, function() {
+          flag = true;
+        });
+
+        waitsFor(function() {
+          return flag;
+        });
+      };
+    },
+
+    2: function(array, onLoaded) {
+      var args = parseArgs(array, onLoaded);
+      return function(done) {
+        r(this, args, done);
+      };
+    }
+  };
+
+  var VERSION = (function() {
+    var v = jasmine.version_ || jasmine.version;
+
+    if (v.major) {
+      v = v.major;
+    } else {
+      v = parseInt(v.split('.')[0], 10);
+    }
+
+    return v;
+  })();
+
+  // Register rjs function according to jasmine version (with a fallback to jasmine 2).
+  jasmine.rjs = root.rjs = rjs[VERSION] || rjs[2];
 
 })(this);

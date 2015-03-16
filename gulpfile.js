@@ -25,7 +25,6 @@
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var taskListing = require('gulp-task-listing');
-var karma = require('karma').server;
 
 gulp.task('lint', function() {
   return gulp.src("src/**/*.js")
@@ -33,32 +32,46 @@ gulp.task('lint', function() {
     .pipe(jshint.reporter("default"));
 });
 
-gulp.task('tdd', function(done) {
-  var options = {
-    configFile: __dirname + '/karma.conf.js'
-  };
+var tddTasks = [];
+var testTasks = [];
 
-  var onDone = function() {
-    done();
-  };
+['jasmine13', 'jasmine2'].forEach(function(jasmine) {
+  var karma = require('./test/' + jasmine + '/node_modules/karma/').server;
+  var tddTask = 'tdd:' + jasmine;
+  var testTask = 'test:' + jasmine;
+  var configFile =  __dirname + '/test/' + jasmine + '/karma.conf.js';
 
-  karma.start(options, onDone);
+  tddTasks.push(tddTask);
+  testTasks.push(testTask);
+
+  gulp.task(tddTask, function(done) {
+    var options = {
+      configFile: configFile
+    };
+
+    var onDone = function() {
+      done();
+    };
+
+    karma.start(options, onDone);
+  });
+
+  gulp.task(testTask, function(done) {
+    var options = {
+      configFile: configFile,
+      singleRun: true,
+      browsers: ['PhantomJS']
+    };
+
+    var onDone = function() {
+      done();
+    };
+
+    karma.start(options, onDone);
+  });
 });
 
-// Create test task for each target
-gulp.task('test', function(done) {
-  var options = {
-    configFile: __dirname + '/karma.conf.js',
-    singleRun: true,
-    browsers: ['PhantomJS']
-  };
-
-  var onDone = function() {
-    done();
-  };
-
-  karma.start(options, onDone);
-});
-
+gulp.task('tdd', tddTasks);
+gulp.task('test', testTasks);
 gulp.task('build', ['lint', 'test']);
 gulp.task('default', ['build']);
